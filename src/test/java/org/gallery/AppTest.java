@@ -1,4 +1,4 @@
-package org.example;
+package org.gallery;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
