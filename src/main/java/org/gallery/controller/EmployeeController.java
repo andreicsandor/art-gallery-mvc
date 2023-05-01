@@ -2,6 +2,7 @@ package org.gallery.controller;
 
 import org.gallery.model.Exhibit;
 import org.gallery.model.Gallery;
+import org.gallery.model.Language;
 import org.gallery.view.EmployeeView;
 
 import javax.swing.*;
@@ -10,15 +11,24 @@ import java.util.Observable;
 
 public class EmployeeController extends GalleryController {
     private final EmployeeView view;
+    final private Language language;
 
     public EmployeeController() {
         super();
         this.view = new EmployeeView();
+        this.language = new Language();
+        language.addObserver(this);
 
         // Initialise fields
         this.handleRead();
         this.configureGalleryField();
         this.configureCriteriaField();
+
+        // Add event listeners to the language menu items
+        this.view.getEnMenuItem().addActionListener(e -> handleLanguageSelection("en"));
+        this.view.getFrMenuItem().addActionListener(e -> handleLanguageSelection("fr"));
+        this.view.getEsMenuItem().addActionListener(e -> handleLanguageSelection("es"));
+        this.view.getRoMenuItem().addActionListener(e -> handleLanguageSelection("ro"));
 
         // Add event listeners to the buttons
         this.view.getTable().getSelectionModel().addListSelectionListener(e -> updateFields());
@@ -28,6 +38,8 @@ public class EmployeeController extends GalleryController {
         this.view.getDeleteButton().addActionListener(e -> handleDelete());
         this.view.getFilterButton().addActionListener(e -> handleFilter());
         this.view.getClearButton().addActionListener(e -> handleRead());
+
+        updateView();
     }
 
     public void handleRead() {
@@ -50,8 +62,7 @@ public class EmployeeController extends GalleryController {
 
         Exhibit existingExhibit = exhibitRepository.findByNameArtist(name, artist);
         if (existingExhibit != null) {
-            String errorMessage = String.format("Exhibit '%s' by '%s' is already registered.", name, artist);
-            this.showError(errorMessage);
+            this.showError(language.getString("error.exhibitRegistered"));
             return;
         }
 
@@ -66,10 +77,10 @@ public class EmployeeController extends GalleryController {
             gallery.addExhibit(exhibit);
             galleryRepository.update(gallery);
         } catch (Exception e) {
-            this.showError("Failed to create a new exhibit.");
+            this.showError(language.getString("error.createExhibit"));
         }
 
-        this.showMessage("Exhibit created successfully.");
+        this.showMessage(language.getString("message.createExhibit"));
 
         // Refresh the table
         handleRead();
@@ -114,10 +125,10 @@ public class EmployeeController extends GalleryController {
             exhibitRepository.update(managedExhibit);
 
         } catch (Exception e) {
-            this.showError("Failed to update exhibit.");
+            this.showError(language.getString("error.updateExhibit"));
         }
 
-        this.showMessage("Exhibit updated successfully.");
+        this.showMessage(language.getString("message.updateExhibit"));
 
         // Refresh the table
         handleRead();
@@ -142,10 +153,10 @@ public class EmployeeController extends GalleryController {
             galleryRepository.update(gallery);
 
         } catch (Exception e) {
-            this.showError("Failed to delete exhibit.");
+            this.showError(language.getString("error.deleteExhibit"));
         }
 
-        this.showMessage("Exhibit deleted successfully.");
+        this.showMessage(language.getString("message.deleteExhibit"));
 
         // Refresh the table
         handleRead();
@@ -213,6 +224,10 @@ public class EmployeeController extends GalleryController {
         this.view.getClearButton().setSelected(false);
     }
 
+    public void handleLanguageSelection(String languageCode) {
+        language.setLanguage(languageCode);
+    }
+
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this.view, message, "", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -223,6 +238,27 @@ public class EmployeeController extends GalleryController {
 
     @Override
     public void update(Observable o, Object arg) {
+        updateView();
+    }
 
+    private void updateView() {
+        this.view.setTitle(language.getString("gallery.window"));
+        this.view.getTitleLabel().setText(language.getString("gallery.title"));
+        this.view.getSubtitleLabel().setText(language.getString("gallery.subtitle"));
+        this.view.getNameLabel().setText(language.getString("gallery.name"));
+        this.view.getArtistLabel().setText(language.getString("gallery.artist"));
+        this.view.getYearLabel().setText(language.getString("gallery.year"));
+        this.view.getTypeLabel().setText(language.getString("gallery.type"));
+        this.view.getGalleryLabel().setText(language.getString("gallery.gallery"));
+        this.view.getCreateButton().setText(language.getString("gallery.createButton"));
+        this.view.getUpdateButton().setText(language.getString("gallery.updateButton"));
+        this.view.getDeleteButton().setText(language.getString("gallery.deleteButton"));
+        this.view.getFilterButton().setText(language.getString("gallery.filterButton"));
+        this.view.getClearButton().setText(language.getString("gallery.clearButton"));
+        this.view.getLanguageMenu().setText(language.getString("menu.language"));
+        this.view.getEnMenuItem().setText(language.getString("menu.english"));
+        this.view.getFrMenuItem().setText(language.getString("menu.french"));
+        this.view.getEsMenuItem().setText(language.getString("menu.spanish"));
+        this.view.getRoMenuItem().setText(language.getString("menu.romanian"));
     }
 }

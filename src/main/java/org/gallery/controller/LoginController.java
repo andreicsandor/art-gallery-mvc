@@ -1,6 +1,7 @@
 package org.gallery.controller;
 
 import org.gallery.model.Account;
+import org.gallery.model.Language;
 import org.gallery.model.repository.AccountRepository;
 import org.gallery.view.LoginView;
 
@@ -11,14 +12,25 @@ import java.util.Observer;
 public class LoginController implements Observer {
     final private AccountRepository repository;
     final private LoginView view;
+    final private Language language;
 
     public LoginController() {
         this.repository = new AccountRepository();
         this.view = new LoginView();
+        this.language = new Language();
+        language.addObserver(this);
+
+        // Add event listeners to the language menu items
+        this.view.getEnMenuItem().addActionListener(e -> handleLanguageSelection("en"));
+        this.view.getFrMenuItem().addActionListener(e -> handleLanguageSelection("fr"));
+        this.view.getEsMenuItem().addActionListener(e -> handleLanguageSelection("es"));
+        this.view.getRoMenuItem().addActionListener(e -> handleLanguageSelection("ro"));
 
         // Add event listeners to the buttons
         this.view.getLoginButton().addActionListener(e -> handleLogin());
         this.view.getVisitButton().addActionListener(e -> handleVisit());
+
+        updateView();
     }
 
     public void handleLogin() {
@@ -59,12 +71,30 @@ public class LoginController implements Observer {
         VisitorController visitorWindow = new VisitorController();
     }
 
+    public void handleLanguageSelection(String languageCode) {
+        language.setLanguage(languageCode);
+    }
+
     public void showError(String errorMessage) {
         JOptionPane.showMessageDialog(view, errorMessage, "", JOptionPane.ERROR_MESSAGE);
     }
 
     @Override
     public void update(Observable o, Object arg) {
+        updateView();
+    }
 
+    private void updateView() {
+        this.view.getTitleLabel().setText(language.getString("login.title"));
+        this.view.getSubtitleLabel().setText(language.getString("login.subtitle"));
+        this.view.getUsernameLabel().setText(language.getString("login.username"));
+        this.view.getPasswordLabel().setText(language.getString("login.password"));
+        this.view.getLoginButton().setText(language.getString("login.loginButton"));
+        this.view.getVisitButton().setText(language.getString("login.visitButton"));
+        this.view.getLanguageMenu().setText(language.getString("menu.language"));
+        this.view.getEnMenuItem().setText(language.getString("menu.english"));
+        this.view.getFrMenuItem().setText(language.getString("menu.french"));
+        this.view.getEsMenuItem().setText(language.getString("menu.spanish"));
+        this.view.getRoMenuItem().setText(language.getString("menu.romanian"));
     }
 }

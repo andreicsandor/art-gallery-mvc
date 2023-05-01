@@ -2,6 +2,7 @@ package org.gallery.controller;
 
 import org.gallery.model.Account;
 import org.gallery.model.Gallery;
+import org.gallery.model.Language;
 import org.gallery.model.repository.AccountRepository;
 import org.gallery.model.repository.GalleryRepository;
 import org.gallery.view.AdminView;
@@ -14,15 +15,24 @@ public class AdminController implements Observer {
     final private AccountRepository accountRepository;
     final private GalleryRepository galleryRepository;
     final private AdminView view;
+    final private Language language;
 
     public AdminController() {
         this.accountRepository = new AccountRepository();
         this.galleryRepository = new GalleryRepository();
         this.view = new AdminView();
+        this.language = new Language();
+        language.addObserver(this);
 
         // Initialise fields
         this.handleRead();
         this.configureGalleryField();
+
+        // Add event listeners to the language menu items
+        this.view.getEnMenuItem().addActionListener(e -> handleLanguageSelection("en"));
+        this.view.getFrMenuItem().addActionListener(e -> handleLanguageSelection("fr"));
+        this.view.getEsMenuItem().addActionListener(e -> handleLanguageSelection("es"));
+        this.view.getRoMenuItem().addActionListener(e -> handleLanguageSelection("ro"));
 
         // Add event listeners to the buttons
         this.view.getTable().getSelectionModel().addListSelectionListener(e -> updateFields());
@@ -30,6 +40,8 @@ public class AdminController implements Observer {
         this.view.getCreateButton().addActionListener(e -> handleCreate());
         this.view.getUpdateButton().addActionListener(e -> handleUpdate());
         this.view.getDeleteButton().addActionListener(e -> handleDelete());
+
+        updateView();
     }
 
     public void handleRead() {
@@ -59,8 +71,7 @@ public class AdminController implements Observer {
 
         Account existingAccount = accountRepository.findByUsername(username);
         if (existingAccount != null) {
-            String message = String.format("Username '%s' is already taken.\nPlease choose a different username.", username);
-            this.showError(message);
+            this.showError(language.getString("error.usernameTaken"));
             return;
         }
 
@@ -77,10 +88,10 @@ public class AdminController implements Observer {
                 galleryRepository.update(gallery);
             }
         } catch (Exception e) {
-            this.showError("Failed to create a new account.");
+            this.showError(language.getString("error.createAccount"));
         }
 
-        this.showMessage("Account created successfully.");
+        this.showMessage(language.getString("message.createAccount"));
 
         // Refresh the table
         handleRead();
@@ -131,10 +142,10 @@ public class AdminController implements Observer {
             accountRepository.update(managedAccount);
 
         } catch (Exception e) {
-            this.showError("Failed to update account.");
+            this.showError(language.getString("error.updateAccount"));
         }
 
-        this.showMessage("Account updated successfully.");
+        this.showMessage(language.getString("message.updateAccount"));
 
         // Refresh components
         handleRead();
@@ -163,10 +174,10 @@ public class AdminController implements Observer {
                 galleryRepository.update(gallery);
 
         } catch (Exception e) {
-            this.showError("Failed to delete account.");
+            this.showError(language.getString("error.deleteAccount"));
         }
 
-        this.showMessage("Account deleted successfully.");
+        this.showMessage(language.getString("message.deleteAccount"));
 
         // Refresh the table
         handleRead();
@@ -275,6 +286,10 @@ public class AdminController implements Observer {
         this.view.getDeleteButton().setSelected(false);
     }
 
+    public void handleLanguageSelection(String languageCode) {
+        language.setLanguage(languageCode);
+    }
+
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this.view, message, "", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -285,6 +300,26 @@ public class AdminController implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
+        updateView();
+    }
 
+    private void updateView() {
+        this.view.setTitle(language.getString("account.window"));
+        this.view.getTitleLabel().setText(language.getString("account.title"));
+        this.view.getSubtitleLabel().setText(language.getString("account.subtitle"));
+        this.view.getNameLabel().setText(language.getString("account.name"));
+        this.view.getSurnameLabel().setText(language.getString("account.surname"));
+        this.view.getUsernameLabel().setText(language.getString("account.username"));
+        this.view.getPasswordLabel().setText(language.getString("account.password"));
+        this.view.getRoleLabel().setText(language.getString("account.role"));
+        this.view.getGalleryLabel().setText(language.getString("account.gallery"));
+        this.view.getCreateButton().setText(language.getString("account.createButton"));
+        this.view.getUpdateButton().setText(language.getString("account.updateButton"));
+        this.view.getDeleteButton().setText(language.getString("account.deleteButton"));
+        this.view.getLanguageMenu().setText(language.getString("menu.language"));
+        this.view.getEnMenuItem().setText(language.getString("menu.english"));
+        this.view.getFrMenuItem().setText(language.getString("menu.french"));
+        this.view.getEsMenuItem().setText(language.getString("menu.spanish"));
+        this.view.getRoMenuItem().setText(language.getString("menu.romanian"));
     }
 }

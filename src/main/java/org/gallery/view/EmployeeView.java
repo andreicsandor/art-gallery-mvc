@@ -9,6 +9,9 @@ import java.awt.event.WindowEvent;
 public class EmployeeView extends JFrame {
     public static final String[] FILTER = {"Type", "Artist"};
     public static final String[] TYPES = {"Painting", "Sculpture"};
+    private JMenuBar menuBar;
+    private JMenu languageMenu;
+    private JMenuItem enMenuItem, frMenuItem, esMenuItem, roMenuItem;
     protected JLabel subtitleLabel, titleLabel, nameLabel, artistLabel, yearLabel, typeLabel, galleryLabel;
     protected JTextField idField, nameField, artistField, yearField, filterSearchField;
     protected JComboBox<String> typeField, galleryField, filterTypeField, filterCriteriaField;
@@ -36,6 +39,26 @@ public class EmployeeView extends JFrame {
                 System.exit(0);
             }
         });
+
+        // Create menu components
+        menuBar = new JMenuBar();
+        languageMenu = new JMenu("Language");
+        enMenuItem = new JMenuItem("English");
+        frMenuItem = new JMenuItem("French");
+        esMenuItem = new JMenuItem("Spanish");
+        roMenuItem = new JMenuItem("Romanian");
+
+        // Add menu items to the menu
+        languageMenu.add(enMenuItem);
+        languageMenu.add(frMenuItem);
+        languageMenu.add(esMenuItem);
+        languageMenu.add(roMenuItem);
+
+        // Add menu to the menu bar
+        menuBar.add(languageMenu);
+
+        // Set the menu bar in the frame
+        setJMenuBar(menuBar);
 
         // Set the window title & context specific text
         setTitle("Art Gallery — Exhibits");
@@ -245,6 +268,30 @@ public class EmployeeView extends JFrame {
         return titleLabel;
     }
 
+    public JLabel getSubtitleLabel() {
+        return subtitleLabel;
+    }
+
+    public JLabel getNameLabel() {
+        return nameLabel;
+    }
+
+    public JLabel getArtistLabel() {
+        return artistLabel;
+    }
+
+    public JLabel getYearLabel() {
+        return yearLabel;
+    }
+
+    public JLabel getTypeLabel() {
+        return typeLabel;
+    }
+
+    public JLabel getGalleryLabel() {
+        return galleryLabel;
+    }
+
     public JTextField getIdField() {
         return idField;
     }
@@ -303,5 +350,25 @@ public class EmployeeView extends JFrame {
 
     public JTable getTable() {
         return table;
+    }
+
+    public JMenu getLanguageMenu() {
+        return languageMenu;
+    }
+
+    public JMenuItem getEnMenuItem() {
+        return enMenuItem;
+    }
+
+    public JMenuItem getFrMenuItem() {
+        return frMenuItem;
+    }
+
+    public JMenuItem getEsMenuItem() {
+        return esMenuItem;
+    }
+
+    public JMenuItem getRoMenuItem() {
+        return roMenuItem;
     }
 }

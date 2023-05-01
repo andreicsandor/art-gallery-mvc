@@ -6,6 +6,9 @@ import java.awt.event.WindowEvent;
 
 public class LoginView extends JFrame {
 
+    private JMenuBar menuBar;
+    private JMenu languageMenu;
+    private JMenuItem enMenuItem, frMenuItem, esMenuItem, roMenuItem;
     private JLabel subtitleLabel, titleLabel, usernameLabel, passwordLabel;
     private JTextField usernameField;
     private JPasswordField passwordField;
@@ -31,15 +34,35 @@ public class LoginView extends JFrame {
             }
         });
 
+        // Create menu components
+        menuBar = new JMenuBar();
+        languageMenu = new JMenu("Language");
+        enMenuItem = new JMenuItem("English");
+        frMenuItem = new JMenuItem("French");
+        esMenuItem = new JMenuItem("Spanish");
+        roMenuItem = new JMenuItem("Romanian");
+
+        // Add menu items to the menu
+        languageMenu.add(enMenuItem);
+        languageMenu.add(frMenuItem);
+        languageMenu.add(esMenuItem);
+        languageMenu.add(roMenuItem);
+
+        // Add menu to the menu bar
+        menuBar.add(languageMenu);
+
+        // Set the menu bar in the frame
+        setJMenuBar(menuBar);
+
         // Set the window title & context specific text
         setTitle("");
 
         // Configure UI fields & labels
         titleLabel = new JLabel("Log in to your account");
         subtitleLabel = new JLabel("Welcome to Art Gallery");
-        usernameLabel = new JLabel("Username:");
+        usernameLabel = new JLabel("Username");
         usernameField = new JTextField();
-        passwordLabel = new JLabel("Password:");
+        passwordLabel = new JLabel("Password");
         passwordField = new JPasswordField();
         separator1 = new JSeparator();
         separator2 = new JSeparator();
@@ -141,6 +164,22 @@ public class LoginView extends JFrame {
         setVisible(true);
     }
 
+    public JLabel getTitleLabel() {
+        return titleLabel;
+    }
+
+    public JLabel getSubtitleLabel() {
+        return subtitleLabel;
+    }
+
+    public JLabel getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public JLabel getPasswordLabel() {
+        return passwordLabel;
+    }
+
     public JTextField getUsernameField() {
         return usernameField;
     }
@@ -155,5 +194,25 @@ public class LoginView extends JFrame {
 
     public JToggleButton getVisitButton() {
         return visitButton;
+    }
+
+    public JMenu getLanguageMenu() {
+        return languageMenu;
+    }
+
+    public JMenuItem getEnMenuItem() {
+        return enMenuItem;
+    }
+
+    public JMenuItem getFrMenuItem() {
+        return frMenuItem;
+    }
+
+    public JMenuItem getEsMenuItem() {
+        return esMenuItem;
+    }
+
+    public JMenuItem getRoMenuItem() {
+        return roMenuItem;
     }
 }

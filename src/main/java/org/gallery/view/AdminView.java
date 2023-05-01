@@ -8,6 +8,9 @@ import java.awt.event.WindowEvent;
 public class AdminView extends JFrame {
 
     public static final String[] ROLES = {"Employee", "Administrator"};
+    private JMenuBar menuBar;
+    private JMenu languageMenu;
+    private JMenuItem enMenuItem, frMenuItem, esMenuItem, roMenuItem;
     private JLabel subtitleLabel, titleLabel, nameLabel, surnameLabel, usernameLabel, passwordLabel, roleLabel, galleryLabel;
     private JTextField idField, nameField, surnameField, usernameField;
     private JPasswordField passwordField;
@@ -36,6 +39,26 @@ public class AdminView extends JFrame {
                 System.exit(0);
             }
         });
+
+        // Create menu components
+        menuBar = new JMenuBar();
+        languageMenu = new JMenu("Language");
+        enMenuItem = new JMenuItem("English");
+        frMenuItem = new JMenuItem("French");
+        esMenuItem = new JMenuItem("Spanish");
+        roMenuItem = new JMenuItem("Romanian");
+
+        // Add menu items to the menu
+        languageMenu.add(enMenuItem);
+        languageMenu.add(frMenuItem);
+        languageMenu.add(esMenuItem);
+        languageMenu.add(roMenuItem);
+
+        // Add menu to the menu bar
+        menuBar.add(languageMenu);
+
+        // Set the menu bar in the frame
+        setJMenuBar(menuBar);
 
         // Set the window title
         setTitle("Account Management");
@@ -236,6 +259,34 @@ public class AdminView extends JFrame {
         return titleLabel;
     }
 
+    public JLabel getSubtitleLabel() {
+        return subtitleLabel;
+    }
+
+    public JLabel getNameLabel() {
+        return nameLabel;
+    }
+
+    public JLabel getSurnameLabel() {
+        return surnameLabel;
+    }
+
+    public JLabel getUsernameLabel() {
+        return usernameLabel;
+    }
+
+    public JLabel getPasswordLabel() {
+        return passwordLabel;
+    }
+
+    public JLabel getRoleLabel() {
+        return roleLabel;
+    }
+
+    public JLabel getGalleryLabel() {
+        return galleryLabel;
+    }
+
     public JTextField getIdField() {
         return idField;
     }
@@ -282,5 +333,25 @@ public class AdminView extends JFrame {
 
     public JTable getTable() {
         return table;
+    }
+
+    public JMenu getLanguageMenu() {
+        return languageMenu;
+    }
+
+    public JMenuItem getEnMenuItem() {
+        return enMenuItem;
+    }
+
+    public JMenuItem getFrMenuItem() {
+        return frMenuItem;
+    }
+
+    public JMenuItem getEsMenuItem() {
+        return esMenuItem;
+    }
+
+    public JMenuItem getRoMenuItem() {
+        return roMenuItem;
     }
 }

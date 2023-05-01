@@ -1,5 +1,6 @@
 package org.gallery.controller;
 
+import org.gallery.model.Language;
 import org.gallery.view.VisitorView;
 
 import javax.swing.*;
@@ -8,10 +9,13 @@ import java.util.Observable;
 
 public class VisitorController extends GalleryController {
     private final VisitorView view;
+    final private Language language;
 
     public VisitorController() {
         super();
         this.view = new VisitorView();
+        this.language = new Language();
+        language.addObserver(this);
 
         // Initialise fields
         this.handleRead();
@@ -26,11 +30,19 @@ public class VisitorController extends GalleryController {
         this.view.getTypeField().setEnabled(false);
         this.view.getGalleryField().setEnabled(false);
 
+        // Add event listeners to the language menu items
+        this.view.getEnMenuItem().addActionListener(e -> handleLanguageSelection("en"));
+        this.view.getFrMenuItem().addActionListener(e -> handleLanguageSelection("fr"));
+        this.view.getEsMenuItem().addActionListener(e -> handleLanguageSelection("es"));
+        this.view.getRoMenuItem().addActionListener(e -> handleLanguageSelection("ro"));
+
         // Add event listeners to the buttons
         this.view.getTable().getSelectionModel().addListSelectionListener(e -> updateFields());
         this.view.getFilterField().addActionListener(e -> configureCriteriaField());
         this.view.getFilterButton().addActionListener(e -> handleFilter());
         this.view.getClearButton().addActionListener(e -> handleRead());
+
+        updateView();
     }
 
     public void handleRead() {
@@ -106,8 +118,33 @@ public class VisitorController extends GalleryController {
         this.view.getClearButton().setSelected(false);
     }
 
+    public void handleLanguageSelection(String languageCode) {
+        language.setLanguage(languageCode);
+    }
+
     @Override
     public void update(Observable o, Object arg) {
+        updateView();
+    }
 
+    private void updateView() {
+        this.view.setTitle(language.getString("gallery.window"));
+        this.view.getTitleLabel().setText(language.getString("gallery.title"));
+        this.view.getSubtitleLabel().setText(language.getString("gallery.subtitle"));
+        this.view.getNameLabel().setText(language.getString("gallery.name"));
+        this.view.getArtistLabel().setText(language.getString("gallery.artist"));
+        this.view.getYearLabel().setText(language.getString("gallery.year"));
+        this.view.getTypeLabel().setText(language.getString("gallery.type"));
+        this.view.getGalleryLabel().setText(language.getString("gallery.gallery"));
+        this.view.getCreateButton().setText(language.getString("gallery.createButton"));
+        this.view.getUpdateButton().setText(language.getString("gallery.updateButton"));
+        this.view.getDeleteButton().setText(language.getString("gallery.deleteButton"));
+        this.view.getFilterButton().setText(language.getString("gallery.filterButton"));
+        this.view.getClearButton().setText(language.getString("gallery.clearButton"));
+        this.view.getLanguageMenu().setText(language.getString("menu.language"));
+        this.view.getEnMenuItem().setText(language.getString("menu.english"));
+        this.view.getFrMenuItem().setText(language.getString("menu.french"));
+        this.view.getEsMenuItem().setText(language.getString("menu.spanish"));
+        this.view.getRoMenuItem().setText(language.getString("menu.romanian"));
     }
 }
