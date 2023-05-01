@@ -46,7 +46,6 @@ public class AdminController implements Observer {
 
         // Refresh components
         this.view.getTable().repaint();
-        this.refreshFields();
         this.refreshButtons();
     }
 
