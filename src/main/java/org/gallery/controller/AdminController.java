@@ -272,14 +272,6 @@ public class AdminController implements Observer {
         this.view.getGalleryField().setSelectedItem(null); // Set default value
     }
 
-    public void refreshFields() {
-        this.view.getTitleLabel().setText("Account Details");
-        this.view.getIdField().setText("");
-        this.view.getNameField().setText("");
-        this.view.getRoleField().setSelectedIndex(0);
-        this.view.getGalleryField().setSelectedIndex(0);
-    }
-
     public void refreshButtons() {
         this.view.getCreateButton().setSelected(false);
         this.view.getUpdateButton().setSelected(false);
