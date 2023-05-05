@@ -250,7 +250,7 @@ public class AdminView extends JFrame {
         );
 
         pack();
-        setSize(860, 419);
+        setSize(860, 445);
         setLocationRelativeTo(null);
         setVisible(true);
     }

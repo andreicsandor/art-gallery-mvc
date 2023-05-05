@@ -259,7 +259,7 @@ public class EmployeeView extends JFrame {
         );
 
         pack();
-        setSize(900, 420);
+        setSize(900, 445);
         setLocationRelativeTo(null);
         setVisible(true);
     }
